@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  password  String
+  role      String   @default("user")
+  status    String   @default("active")
+  
+  // Studio Preferences
+  defaultStyle   String   @default("Photorealistic")
+  defaultFormat  String   @default("PNG")
+  autoUpscale    Boolean  @default(true)
+  saveToLibrary  Boolean  @default(true)
+  aiPostProcess  Boolean  @default(false)
+
+  images    Image[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Image {
+  id          Int      @id @default(autoincrement())
+  url         String   @db.Text
+  prompt      String   @db.Text
+  style       String?
+  aspectRatio String?
+  format      String?
+  groupId     String?
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+
+  @@map("images")
+}
