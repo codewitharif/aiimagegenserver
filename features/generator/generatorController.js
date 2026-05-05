@@ -25,10 +25,11 @@ export const generateImage = async (req, res) => {
       - Clean, modern, and eye-catching composition.
       - Vibrant but professional color palette.
       - Premium product photography look.
-      - Clear negative space for potential text overlays.
+      - INTEGRATED TYPOGRAPHY: Include catchy, bold, and readable English text/headlines within the image.
+      - ALL TEXT MUST BE IN ENGLISH.
       - Emotional appeal and professional lighting.
-      - High-end commercial aesthetic suitable for social media marketing (Instagram, Facebook Ads).
-      Avoid: cluttered backgrounds, low quality, or amateur look.`;
+      - High-end commercial aesthetic suitable for social media marketing.
+      Avoid: cluttered backgrounds, low quality, or non-English text.`;
     }
 
     const finalNumSlides = generationType === 'carousel' ? Math.min(Math.max(parseInt(numSlides), 2), 10) : 1;
@@ -39,10 +40,15 @@ export const generateImage = async (req, res) => {
     if (generationType === 'carousel') {
       const carouselPrompt = `You are a creative ad strategist. Based on this prompt: "${prompt}", generate ${finalNumSlides} cohesive slide descriptions for a carousel ad. 
       Each slide should follow a story: 
-      Slide 1: Hook/Introduction.
-      Slide 2-${finalNumSlides - 1}: Value Propositions/Features.
-      Slide ${finalNumSlides}: Call to Action.
-      Return ONLY a JSON array of strings, where each string is the enhanced prompt for that specific slide. Include the ${styleInstruction}`;
+      Slide 1: Hook/Introduction with a strong English headline.
+      Slide 2-${finalNumSlides - 1}: Value Propositions/Features with supporting English text.
+      Slide ${finalNumSlides}: Call to Action with clear English CTA text.
+      
+      IMPORTANT: 
+      1. Every slide description must explicitly include instructions to display specific English words or phrases related to the product.
+      2. The descriptions themselves must be in English.
+      3. Return ONLY a JSON array of strings, where each string is the enhanced prompt for that specific slide. 
+      4. Include the ${styleInstruction}`;
 
       const result = await model.generateContent(carouselPrompt);
       const response = await result.response;

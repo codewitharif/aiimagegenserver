@@ -38,4 +38,14 @@ app.use((err, req, res, next) => {
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
+  
+  try {
+    const dbUrl = process.env.DATABASE_URL;
+    if (dbUrl) {
+      const url = new URL(dbUrl.replace('mysql://', 'http://')); // URL parser works better with http
+      console.log(`📁[database]: Connected to ${url.hostname}`);
+    }
+  } catch (error) {
+    console.log('📁[database]: Could not parse DATABASE_URL');
+  }
 });
